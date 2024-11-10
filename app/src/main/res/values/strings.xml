@@ -6,8 +6,8 @@
     <string name="author_text">Netology. University of Internet Professions of the Future</string>
     <string name="published_text">May 21 at 18:36</string>
     <string name="content_text">Hi, this is the new Netology! Netology once started with intensive courses in online marketing. Then courses appeared in design, development, analytics and management. We grow ourselves and help students grow: from beginners to confident professionals. But the most important thing remains with us: we believe that everyone already has a force that makes them want more, aim higher, run faster. Our mission is to help get on the path to growth and start a chain of changes → http://netolo.gy/fyb</string>
-    <string name="like">like</string>
-    <string name="like_count">999</string>
-    <string name="share_count">35</string>
-    <string name="view_count">2032</string>
+    <string name="like" translatable="false">like</string>
+    <string name="like_count" translatable="false">999</string>
+    <string name="share_count" translatable="false">35</string>
+    <string name="view_count" translatable="false">2032</string>
 </resources>

@@ -1,17 +1,15 @@
 package ru.netology.nmedia
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -22,14 +20,14 @@ class MainActivity : AppCompatActivity() {
         avatar.setImageResource(R.drawable.ic_netology_48dp)
 
 
-        val post = Post(
+        var post = Post(
             id = 1,
             author = "Нетология. Университет интернет-профессий будущего",
             published = "21 мая в 18:36",
             content = "Привет, это новая Нетология! Когда-то Нетология начиналась с интенсивов по онлайн-маркетингу. Затем появились курсы по дизайну, разработке, аналитике и управлению. Мы растём сами и помогаем расти студентам: от новичков до уверенных профессионалов. Но самое важное остаётся с нами: мы верим, что в каждом уже есть сила, которая заставляет хотеть больше, целиться выше, бежать быстрее. Наша миссия — помочь встать на путь роста и начать цепочку перемен → http://netolo.gy/fyb ",
             likedByMy = false,
             likes = 999,
-            shares = 999,
+            shares = 900,
         )
 
         // Инициализация значений для отображения
@@ -42,10 +40,13 @@ class MainActivity : AppCompatActivity() {
 
         // Клик на like
         binding.like.setOnClickListener {
-            post.likedByMy = !post.likedByMy
-            post.likes = if (post.likedByMy) post.likes + 1 else post.likes - 1
-            binding.likeCount.text = formatCount(post.likes)
-                  updateLikeImage(binding, post)
+            val updatedPost = post.copy(
+                likedByMy = !post.likedByMy,
+                likes = if (post.likedByMy) post.likes - 1 else post.likes + 1
+            )
+            post = updatedPost
+            binding.likeCount.text = formatCount(updatedPost.likes)
+            updateLikeImage(binding, updatedPost)
             //        Log.d("MainActivity", "Клик на like")
 
         }
@@ -53,18 +54,21 @@ class MainActivity : AppCompatActivity() {
         // Клик на share
         binding.share.setOnClickListener {
             post.shares++
+
             binding.shareCount.text = formatCount(post.shares)
-            Log.d("MainActivity", "Клик на share")
+            //  Log.d("MainActivity", "Клик на share")
         }
 
         // Обработчик на корневой элемент (binding.root) - выводит LOG если нажат любой другой элемент
-        //    binding.root.setOnClickListener {
-        //       Log.d("MainActivity", "Клик на root")
-        //   }
+        binding.root.setOnClickListener {
+            //     Log.d("MainActivity", "Клик на root")
 
-        //   binding.avatar.setOnClickListener {
-        //         Log.d("MainActivity", "Клик на аватар")
-        //    }
+        }
+
+        binding.avatar.setOnClickListener {
+            //     Log.d("MainActivity", "Клик на аватар")
+
+        }
 
         updateLikeImage(binding, post) // Обновляем картинку лайка при запуске
     }
@@ -79,14 +83,28 @@ class MainActivity : AppCompatActivity() {
             }
         )
     }
-
+    //   исправленная версия:
 
     private fun formatCount(count: Int): String {
         return when {
             count < 1000 -> count.toString()
-            count < 10000 -> (count / 1000).toString() + "K"
-            count < 1000000 -> (count / 1000).toString() + "K"
-            else -> (count / 1000000).toString() + "M"
+            count < 10000 -> String.format(
+                Locale.getDefault(),
+                "%.1fK",
+                count / 1000.0
+            ) //Более точное форматирование K
+            count < 1000000 -> String.format(
+                Locale.getDefault(),
+                "%.1fK",
+                count / 1000.0
+            ) //Более точное форматирование K
+            else -> String.format(
+                Locale.getDefault(),
+                "%.1fM",
+                count / 1000000.0
+            ) //Более точное форматирование M
         }
     }
+
+
 }

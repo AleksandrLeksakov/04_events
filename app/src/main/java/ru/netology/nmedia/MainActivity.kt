@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
 import java.util.Locale
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class MainActivity : AppCompatActivity() {
 
@@ -88,21 +90,16 @@ class MainActivity : AppCompatActivity() {
     private fun formatCount(count: Int): String {
         return when {
             count < 1000 -> count.toString()
-            count < 10000 -> String.format(
-                Locale.getDefault(),
-                "%.1fK",
-                count / 1000.0
-            ) //Более точное форматирование K
-            count < 1000000 -> String.format(
-                Locale.getDefault(),
-                "%.1fK",
-                count / 1000.0
-            ) //Более точное форматирование K
-            else -> String.format(
-                Locale.getDefault(),
-                "%.1fM",
-                count / 1000000.0
-            ) //Более точное форматирование M
+            count < 1000000 -> {
+                val bd = BigDecimal(count.toDouble() / 1000.0)
+                val formatted = bd.setScale(1, RoundingMode.FLOOR).toDouble()
+                String.format(Locale.getDefault(), "%.1fK", formatted)
+            }
+            else -> {
+                val bd = BigDecimal(count.toDouble() / 1000000.0)
+                val formatted = bd.setScale(1, RoundingMode.FLOOR).toDouble()
+                String.format(Locale.getDefault(), "%.1fM", formatted)
+            }
         }
     }
 

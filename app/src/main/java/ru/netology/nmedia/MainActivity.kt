@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             content = getString(R.string.content_text),
             likedByMy = false,
             likes = 999,
-            shares = 900,
+            shares = 1300000,
         )
 
         // Инициализация значений для отображения
@@ -100,11 +100,12 @@ class MainActivity : AppCompatActivity() {
     private fun formatCount(count: Int): String {
         return when {
             count < 1000 -> count.toString()
-            count < 1000000 -> {
+            count < 10000 -> {
                 val bd = BigDecimal(count.toDouble() / 1000.0)
                 val formatted = bd.setScale(1, RoundingMode.FLOOR).toDouble()
                 String.format(Locale.getDefault(), "%.1fK", formatted)
             }
+            count < 1000000 -> String.format(Locale.getDefault(), "%.0fK", count / 1000.0) //No decimal
             else -> {
                 val bd = BigDecimal(count.toDouble() / 1000000.0)
                 val formatted = bd.setScale(1, RoundingMode.FLOOR).toDouble()

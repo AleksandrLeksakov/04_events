@@ -2,6 +2,7 @@ package ru.netology.nmedia
 
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
@@ -21,12 +22,21 @@ class MainActivity : AppCompatActivity() {
         val avatar: ImageView = findViewById(R.id.avatar)
         avatar.setImageResource(R.drawable.ic_netology_48dp)
 
+        val author: TextView = findViewById(R.id.author)
+        author.setText(R.string.author_text)
+
+        val published: TextView = findViewById(R.id.published)
+        published.setText(R.string.published_text)
+
+        val content: TextView = findViewById(R.id.content)
+        content.setText(R.string.content_text)
+
 
         var post = Post(
             id = 1,
-            author = "Нетология. Университет интернет-профессий будущего",
-            published = "21 мая в 18:36",
-            content = "Привет, это новая Нетология! Когда-то Нетология начиналась с интенсивов по онлайн-маркетингу. Затем появились курсы по дизайну, разработке, аналитике и управлению. Мы растём сами и помогаем расти студентам: от новичков до уверенных профессионалов. Но самое важное остаётся с нами: мы верим, что в каждом уже есть сила, которая заставляет хотеть больше, целиться выше, бежать быстрее. Наша миссия — помочь встать на путь роста и начать цепочку перемен → http://netolo.gy/fyb ",
+            author = getString(R.string.author_text),
+            published = getString(R.string.published_text),
+            content = getString(R.string.content_text),
             likedByMy = false,
             likes = 999,
             shares = 900,

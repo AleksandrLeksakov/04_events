@@ -74,7 +74,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier"
-        tools:text="@string/content_text" />
+        tools:text="@string/content_text"
+        tools:ignore="VisualLintLongText" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/content_barrier"
@@ -128,7 +129,8 @@
         android:contentDescription="@string/like"
         android:src="@drawable/baseline_share_24"
         app:layout_constraintStart_toEndOf="@+id/like_count_barrier"
-        app:layout_constraintTop_toBottomOf="@+id/content_barrier" />
+        app:layout_constraintTop_toBottomOf="@+id/content_barrier"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <TextView
         android:id="@+id/share_count"

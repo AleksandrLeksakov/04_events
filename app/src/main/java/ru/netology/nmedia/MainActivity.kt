@@ -4,13 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.dto.PostViewModel
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.util.Locale
 
 private const val TAG = "MainActivity"
 
@@ -33,68 +29,17 @@ class MainActivity : AppCompatActivity() {
                 author.text = post.author
                 published.text = post.published
                 content.text = post.content
+                likeCount.text = formatCount(post.likes)
+                shareCount.text = formatCount(post.shares)
                 if (post.likedByMy) like.setImageResource(R.drawable.ic_baseline_favorite_24)
                 else like.setImageResource(R.drawable.ic_baseline_favorite_border_24)
             }
         }
-        viewModel.likeText.observe(this) { text ->
-            with(binding) {
-                likeCount.text = text
-            }
-        }
-        viewModel.shareText.observe(this) { text ->
-            Log.d(TAG, "onCreate: $text")
-            with(binding) {
-                shareCount.text = text
-            }
-        }
         binding.like.setOnClickListener {
-            viewModel.updateLikeText()
+            viewModel.like()
         }
         binding.share.setOnClickListener {
-            viewModel.updateShareText()
-        }
-
-
-        fun updataPostUI(post: Post) {
-            // Инициализация значений для отображения
-//        binding.avatar.setImageResource(R.drawable.ic_netology_48dp)
-//        binding.likeCount.text = formatCount(post.likes)
-//        binding.shareCount.text = formatCount(post.shares)
-//        binding.content.text = post.content
-//        binding.published.text = post.published
-//        binding.author.text = post.author
-//
-//        lifecycleScope {
-//            viewModel.posts.collect { post ->
-//                updataPostUI(post)
-//            }
-//            }
-//        }
-//
-//        // Клик на like
-//        binding.like.setOnClickListener {
-//            val updatedPost = post.copy(
-//                likedByMy = post.likedByMy,
-//                likes = if  (post.likedByMy) likes - 1 else post.likes + 1
-//            )
-//            updatedPost = updatedPost
-//            binding.likeCount.text = formatCount(updatedPost.likes)
-//            updateLikeImage(binding, updatedPost)
-//
-//
-//        }
-//
-//        // Клик на share
-//        binding.share.setOnClickListener {
-//            viewModel onCaresCliked(
-//            post.shares++)
-//
-//            binding.shareCount.text = formatCount(post.shares)
-//
-//        }
-//
-//        updateLikeImage(binding, post) // Обновляем картинку лайка при запуске
+            viewModel.share()
         }
 
 
@@ -110,6 +55,17 @@ class MainActivity : AppCompatActivity() {
         //   исправленная версия:
 
 
+    }
+    private fun formatCount(count: Int): String {
+        return when {
+            count == 1000 -> "${(count / 1000)} K"
+            count in 1000 until 999999 -> {
+                val thousands = count/1000
+                val reminders = (count % 1000) / 100
+                if (reminders > 0) "$thousands.${reminders} K" else "$thousands K"
+            }
+            else -> count.toString()
+        }
     }
 
     override fun onStart() {

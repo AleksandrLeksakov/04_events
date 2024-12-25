@@ -10,7 +10,8 @@ import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 
 
-class PostsAdapter(private val callback: (Post) -> Unit) : ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
+class PostsAdapter(private val callback: (Post) -> Unit) :
+    ListAdapter<Post, PostViewHolder>(PostDiffCallback){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -23,10 +24,10 @@ class PostsAdapter(private val callback: (Post) -> Unit) : ListAdapter<Post, Pos
             callback
         )
     }
+
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
-
 
 
 }
@@ -37,7 +38,9 @@ class PostViewHolder(private val binding: CardPostBinding, private val callback:
         author.text = post.author
         published.text = post.published
         content.text = post.content
-        share.setOnClickListener { post.shares + 1 }
+        share.setOnClickListener {
+            callback(post)
+        }
         like.setImageResource(
             if (post.likedByMy) R.drawable.ic_baseline_favorite_24 else R.drawable.ic_baseline_favorite_border_24
         )
@@ -45,13 +48,15 @@ class PostViewHolder(private val binding: CardPostBinding, private val callback:
             callback(post)
         }
         likeCount.text = post.likes.toString()
+        shareCount.text = post.shares.toString()
 
     }
+
 
 }
 
 
-object  PostDiffCallback : DiffUtil.ItemCallback<Post>() {
+object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post) = oldItem.id == newItem.id
 
     override fun areContentsTheSame(oldItem: Post, newItem: Post) = oldItem == newItem

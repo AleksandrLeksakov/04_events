@@ -6,8 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.R
+import ru.netology.nmedia.adapter.PostViewHolder.PostDiffCallback
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
+import java.util.Locale
+
 sealed class PostAction {
     data class Like(val postId: Int) : PostAction()
     data class Share(val postId: Int) : PostAction()
@@ -47,15 +50,30 @@ class PostViewHolder(private val binding: CardPostBinding, private val callback:
         like.setOnClickListener {
             callback(PostAction.Like(post.id))  // Call callback with PostAction.Like
         }
-        likeCount.text = post.likes.toString()
-        shareCount.text = post.shares.toString()
+        likeCount.text = post.likes.formatCount()
+        shareCount.text = post.shares.formatCount()
+    }
+
+
+    private fun Int.formatCount(): String {
+        return when {
+            this < 1000 -> this.toString()
+            this < 10000 -> String.format(Locale.getDefault(), "%.1fK", this / 1000.0)
+            this < 1000000 -> String.format(Locale.getDefault(), "%.0fK", this / 1000.0)
+            else -> String.format(Locale.getDefault(), "%.1fM", this / 1000000.0)
+        }
+    }
+    object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
+        override fun areItemsTheSame(oldItem: Post, newItem: Post) = oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: Post, newItem: Post) = oldItem == newItem
     }
 }
 
-object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
-    override fun areItemsTheSame(oldItem: Post, newItem: Post) = oldItem.id == newItem.id
 
-    override fun areContentsTheSame(oldItem: Post, newItem: Post) = oldItem == newItem
-}
+
+
+
+
 
 
